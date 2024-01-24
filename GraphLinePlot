@@ -1,0 +1,47 @@
+#for graphing lineplots or dynamic lineplots in R 
+#data format is x=time y=y CL=confidence computed elsewhere prior to import
+
+library(RColorBrewer)
+library(tidyverse)
+library("ggplot2")
+library(viridis)
+library(scales)
+
+#use only a subset of data, use this alternate coloring for four groups "#FB9A99"
+data_subset <- subset(data, group == "variable1"| group == "variable2" | group == "variable3" | group == "variable4")   
+p <- ggplot(data=data_subset, aes(x=distance, y=intensity, group=group, color=group)) + scale_color_brewer(palette = "PuOr")+ geom_line(size=1.1) + xlim(0, 9) + ylim(0,1.5)+ scale_y_continuous(breaks=seq(0,2, by=0.1)) + theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p
+p+geom_ribbon(aes(color=group, fill=group, ymin=intensity-CL,ymax=intensity+CL,alpha=0.1))+ scale_fill_brewer(palette = "PuOr")
+
+#alternate visualization 
+p <- ggplot(data=data, aes(x=time, y=intensity, group=group, color=group)) + geom_line(size=1.1) + scale_color_brewer(palette = "Set2")+ ylim(0.4,1.05) + theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p
+p+geom_ribbon(aes(color=group, fill=group, ymin=intensity-CL,ymax=intensity+CL,alpha=0.1))+ scale_fill_brewer(palette = "Set2")
+
+#dynamic lineplot variation, i used this on photoactivation data, example plot shown in repo.
+#data import contains an extra variable which is distance from the leading edge and time is shown as a color scale, import data should be grouped accordingly 
+p <- ggplot(data=data, aes(x=distance, y=intensity, group=time, color=time, show.legend=TRUE)) + geom_line(size=1.0) + xlim(0, 12) + ylim(0.15,2.25)+ theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p 
+p + scale_color_viridis(option = "D")
+
+
+
+
+
+
+
+
+#path<-file.choose()
+#LINE<-read.csv(path,header=TRUE)
+#LINE = matrix(rep(27,50))
+#colMeans(LINE)
+#LINE <- LINE[,-1]
+#rownames(LINE) <- LINE[,1]
+#princ <- prcomp(LINE)
+
+
+library(tidyverse)
+library("ggplot2")
+#path<-file.choose()
+#LINE<-read.csv(path,header=TRUE)
+view(data)
