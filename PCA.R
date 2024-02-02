@@ -1,0 +1,114 @@
+library(factoextra)
+library(magrittr)
+library(dplyr)  
+
+groups <- as.factor(data$group)
+view(data)
+res.pca <- prcomp(data, scale = TRUE)
+
+data$group <- rownames(data)
+view(data)
+
+data <- data[ -c(1) ]
+view(data)
+
+
+fviz_pca_ind(res.pca)
+fviz_pca_ind(res.pca, label="none", habillage=data$group)
+
+
+res.pca <- prcomp(df[, -1],  scale = TRUE)
+fviz_pca_ind(res.pca)
+fviz_pca_ind(res.pca) +
+  labs(title ="PCA", x = "PC1", y = "PC2")
+fviz_pca_ind(res.pca, label="none", habillage=df$group)
+p <- fviz_pca_ind(res.pca, label="none", habillage=df$group,
+                  addEllipses=TRUE, ellipse.level=0.95)
+p+labs(title ="PCA", x = "PC1", y = "PC2")
+p<-p + theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p
+
+
+
+
+
+
+
+fviz_pca_ind(res.pca,
+             col.ind = group, # color by groups
+             palette = c("#00AFBB",  "#FC4E07"),
+             addEllipses = TRUE, # Concentration ellipses
+             ellipse.type = "confidence",
+             legend.title = "Groups",
+             repel = TRUE
+)
+
+
+
+eig.val <- get_eigenvalue(res.pca)
+eig.val
+res.var <- get_pca_var(res.pca)
+res.var$contrib 
+
+
+
+quanti.sup <- data[1:177, 2:3, drop = FALSE]
+view(quanti.sup)
+quanti.coord <- cor(quanti.sup, res.pca$x)
+quanti.cos2 <- quanti.coord^2
+# Graph of variables including supplementary variables
+p <- fviz_pca_var(res.pca)
+fviz_add(p, quanti.coord, color ="blue", geom="arrow")
+
+
+
+
+
+var_coord_func <- function(loadings, comp.sdev){
+  loadings*comp.sdev
+}
+# Compute Coordinates
+#::::::::::::::::::::::::::::::::::::::::
+loadings <- res.pca$rotation
+sdev <- res.pca$sdev
+var.coord <- t(apply(loadings, 1, var_coord_func, sdev)) 
+head(var.coord[, 1:2])
+
+var.cos2 <- var.coord^2
+head(var.cos2[, 1:2])
+
+comp.cos2 <- apply(var.cos2, 2, sum)
+contrib <- function(var.cos2, comp.cos2){var.cos2*100/comp.cos2}
+var.contrib <- t(apply(var.cos2,1, contrib, comp.cos2))
+head(var.contrib[, 1:2])
+
+ind.coord <- res.pca$x
+head(ind.coord[, 1:2])
+
+
+contrib <- function(ind.coord, comp.sdev, n.ind){
+  100*(1/n.ind)*ind.coord^2/comp.sdev^2
+}
+ind.contrib <- t(apply(ind.coord, 1, contrib, 
+                       res.pca$sdev, nrow(ind.coord)))
+head(ind.contrib[, 1:2])
+
+
+view(data)
+groups <- as.factor(data$group)
+library(magrittr) # for pipe %>%
+library(dplyr)   # everything else
+# 1. Individual coordinates
+res.ind <- get_pca_ind(res.pca)
+# 2. Coordinate of groups
+coord.groups <- res.ind$coord %>%
+  as_data_frame() %>%
+  select(Dim.1, Dim.2) %>%
+  mutate(group = groups) %>%
+  group_by(group) %>%
+  summarise(
+    Dim.1 = mean(Dim.1),
+    Dim.2 = mean(Dim.2)
+  )
+view(coord.groups)
+write.csv(coord.groups, "PCAresults.csv")
