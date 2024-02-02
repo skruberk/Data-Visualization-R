@@ -9,13 +9,11 @@ res.pca <- prcomp(data, scale = TRUE)
 data$group <- rownames(data)
 view(data)
 
-data <- data[ -c(1) ]
+data <- data[ -c(1) ] #removed the column with the variables, data frame formatting 
 view(data)
-
 
 fviz_pca_ind(res.pca)
 fviz_pca_ind(res.pca, label="none", habillage=data$group)
-
 
 res.pca <- prcomp(df[, -1],  scale = TRUE)
 fviz_pca_ind(res.pca)
@@ -28,12 +26,7 @@ p+labs(title ="PCA", x = "PC1", y = "PC2")
 p<-p + theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 p
 
-
-
-
-
-
-
+#add the ellipses over the data
 fviz_pca_ind(res.pca,
              col.ind = group, # color by groups
              palette = c("#00AFBB",  "#FC4E07"),
@@ -44,13 +37,11 @@ fviz_pca_ind(res.pca,
 )
 
 
-
+#PCA Analyze Results
 eig.val <- get_eigenvalue(res.pca)
 eig.val
 res.var <- get_pca_var(res.pca)
 res.var$contrib 
-
-
 
 quanti.sup <- data[1:177, 2:3, drop = FALSE]
 view(quanti.sup)
@@ -59,9 +50,6 @@ quanti.cos2 <- quanti.coord^2
 # Graph of variables including supplementary variables
 p <- fviz_pca_var(res.pca)
 fviz_add(p, quanti.coord, color ="blue", geom="arrow")
-
-
-
 
 
 var_coord_func <- function(loadings, comp.sdev){
@@ -93,7 +81,7 @@ ind.contrib <- t(apply(ind.coord, 1, contrib,
                        res.pca$sdev, nrow(ind.coord)))
 head(ind.contrib[, 1:2])
 
-
+#this gets you the mean coordinates for the individauls in the group 
 view(data)
 groups <- as.factor(data$group)
 library(magrittr) # for pipe %>%
