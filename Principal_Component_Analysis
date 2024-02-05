@@ -1,14 +1,13 @@
 library(factoextra)
 library(magrittr)
 library(dplyr)  
-
+#import data in tidy format, filename = data, group = group, here circ and solidity are the output 
 groups <- as.factor(data$group)
 view(data)
 res.pca <- prcomp(data, scale = TRUE)
 
 data$group <- rownames(data)
 view(data)
-
 data <- data[ -c(1) ] #removed the column with the variables, data frame formatting 
 view(data)
 
@@ -21,10 +20,10 @@ fviz_pca_ind(res.pca) +
   labs(title ="PCA", x = "PC1", y = "PC2")
 fviz_pca_ind(res.pca, label="none", habillage=df$group)
 p <- fviz_pca_ind(res.pca, label="none", habillage=df$group,
-                  addEllipses=TRUE, ellipse.level=0.95)
-p+labs(title ="PCA", x = "PC1", y = "PC2")
-p<-p + theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-p
+                  addEllipses=TRUE, ellipse.level=0.95) #95% confidence level on groupings 
+p+labs(title ="PCA", x = "PC1", y = "PC2") #add axes titles
+p<-p + theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) #remove gridlines 
+p #show plot
 
 #add the ellipses over the data
 fviz_pca_ind(res.pca,
