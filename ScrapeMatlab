@@ -1,7 +1,7 @@
 # get all  files with extension "txt" in the current directory
 file.list <- list.files(path = ".", pattern="*.txt", full.names=TRUE, recursive=TRUE)
 
-# this creates a vector where each element contains one file
+# this creates a vector where each element contains one file, sapply() behaves like a while loop 
 all.files <- sapply(file.list, FUN = function(x)readChar(x, file.info(x)$size))
 
 # create a dataframe
@@ -10,9 +10,7 @@ head(df)
 library("writexl")
 write_xlsx(df,"/Users/~filepath/filename.xlsx")
 
-
 file.list <- list.files(path = ".", pattern="*.csv", full.names=TRUE, recursive=TRUE)
-library("writexl")
 library(readxl)
 # this creates a vector where each element contains one file
 all.files <- sapply(file.list, FUN = function(x)readChar(x, file.info(x)$size))
