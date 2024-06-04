@@ -1,4 +1,4 @@
-
+#fits an exponential and plots the residuals
 library(readr)
 library(ggplot2)
 library(minpack.lm)
