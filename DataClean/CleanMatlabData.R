@@ -1,3 +1,5 @@
+#cleans data from MATLAB and exports as a csv for mass input into MATLAB, also calculates and plots linear regression lines
+
 library(dplyr)
 library(tidyr)
 library(janitor)
