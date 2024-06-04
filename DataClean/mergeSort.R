@@ -1,5 +1,4 @@
 #merge sort 
-# Define the merge sort function
 library(ggplot2)
 # Define the merge sort function
 i_vec <- seq(1, 50)
@@ -7,12 +6,12 @@ i_vec <- sample(i_vec)
 print(i_vec)
 
 merge_sort <- function(i_vec) {
-  # Base case: If the vector has only one element, it is already sorted
+  #If the vector has only one element, it is already sorted
   if (length(i_vec) <= 1) {
     return(i_vec)
   }
   
-  # Recursive step: Divide the vector into two halves
+  # Recursive step: Divide vector into two halves
   middle <- length(i_vec) %/% 2
   left <- merge_sort(i_vec[1:middle])
   right <- merge_sort(i_vec[(middle + 1):length(i_vec)])
