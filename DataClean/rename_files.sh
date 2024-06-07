@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#shell script for changing all file names in a directory
 # Check if the correct number of arguments is provided
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <directory>"
