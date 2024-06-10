@@ -28,7 +28,7 @@ View(test_set)
 training_set <- cbind(train_scaled, Purchased = training_set$Purchased)
 test_set <- cbind(test_scaled, Purchased = test_set$Purchased)
 
-# Fitting K-NN, predict test set
+# Fitting K-NN, predict test set, convert predicted probabilities into binary
 y_pred = knn(train = training_set[, -3],
              test = test_set[, -3],
              cl = training_set[, 3],
@@ -41,16 +41,16 @@ View(cm)
 # training set
 
 set = training_set
-X1 = seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01)
+X1 = seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01) #build a grid -1 and +1 so that points aren't on the boundary
 X2 = seq(min(set[, 2]) - 1, max(set[, 2]) + 1, by = 0.01)
-grid_set = expand.grid(X1, X2)
+grid_set = expand.grid(X1, X2) #grid of all combos of x1 and x2 vals
 colnames(grid_set) = c('Age', 'EstimatedSalary')
-y_grid = knn(train = training_set[, -3], test = grid_set, cl = training_set[, 3], k = 5)
+y_grid = knn(train = training_set[, -3], test = grid_set, cl = training_set[, 3], k = 5) #convert predicted probabilities into binary
 plot(set[, -3],
      main = 'K-Nearest Neighbors (Training set)',
      xlab = 'Age', ylab = 'Estimated Salary',
      xlim = range(X1), ylim = range(X2))
-contour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)
+contour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE) #adds the decision boundary to plot
 points(grid_set, pch = '.', col = ifelse(y_grid == 1, 'dodgerblue', 'salmon'))
 points(set, pch = 21, bg = ifelse(set[, 3] == 1, 'dodgerblue3', 'salmon3'))
 
