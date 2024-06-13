@@ -1,2 +1,2 @@
-This repository is a collection of biological data visualization workflows using R and often the tidyverse. It runs from importing data (from MATLAB, FIJI, or excel) to visualizing data using various plots including
-following the instructions for Superplots (Lord et al. JCB "SuperPlots: Communicating reproducibility and variability in cell biology, 2020). Also includes a few shell scripts for data directory management.
+This repository is a collection of biological data analysis and visualization workflows using R and often the tidyverse. It runs from importing data (from MATLAB, FIJI, or excel) to visualizing data using various plots including following the instructions for Superplots (Lord et al. JCB "SuperPlots: Communicating reproducibility and variability in cell biology, 2020). Data analysis methods include regression, classification, clustering, and dimensionality reduction. 
+It also includes a few shell scripts for data directory management.
