@@ -58,6 +58,40 @@ p<-ggplot(error_df,aes(kvals,error_rate))+geom_point()+geom_line(lty='dotted',co
   labs(title = 'Calculate Optimal k value', x = 'k values', y = 'Error Rate') 
 p
 
+
+# Example Plot ------------------------------------------------------------
+# Define the range of values for vars
+
+# Define the range of values for the selected features
+X1 <- seq(min(training_set$MOSTYPE) - 1, max(training_set$MOSTYPE) + 1, by = 0.1)
+X2 <- seq(min(training_set$MZFONDS) - 1, max(training_set$MZFONDS) + 1, by = 0.1)
+
+# Create a grid of points
+grid_set <- expand.grid(X1, X2)
+colnames(grid_set) <- c('MOSTYPE', 'MZFONDS')
+
+# Predict the class for each point in the grid
+predict2 <- knn(train = training_set[, c('MOSTYPE', 'MZFONDS')], 
+                test = grid_set, 
+                cl = train_p, 
+                k = 7)
+
+# Combine grid points and predictions into a data frame
+grid_set$Predicted <- as.numeric(as.character(predict2))
+
+# Plot
+p <- ggplot() +
+  geom_point(data = grid_set, aes(x = MOSTYPE, y = MZFONDS, color = factor(Predicted)), alpha = 0.3) +
+  geom_point(data = training_set, aes(x = MOSTYPE, y = MZFONDS, color = factor(purchase)), size = 2) +
+  labs(title = 'K-Nearest Neighbors (Training set)',
+       x = 'MOSTYPE', y = 'MZFONDS') +
+  scale_color_manual(values = c("salmon", "dodgerblue"), 
+                     name = 'Class',
+                     labels = c('No', 'Yes')) +
+  theme_minimal()
+p
+
+
 # training set
 set <- training_set
 X1 <- seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01)
