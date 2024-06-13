@@ -8,14 +8,15 @@ library(caTools)
 library(tidymodels)
 library(class)
 library(ElemStatLearn)
-library(e1071)
+library(e1071) #SVM specific 
+library(ISLR) #dataset from intro stat learning
 # Importing the dataset
 dataset = dataset[3:5]
 View(dataset)
 # Encoding the target feature as factor
 dataset$Purchased = factor(dataset$Purchased, levels = c(0, 1))
 
-# Splitting the dataset into the Training set and Test set
+# Split dataset into train/test
 set.seed(123)
 split<-initial_split(dataset) #default 3/4 split
 training_set<-training(split)
@@ -73,3 +74,23 @@ p<-ggplot() +
   labs(title = 'SVM (Test set)', x = 'Age', y = 'Estimated Salary') +
   theme_bw()+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 p
+
+# Using the IRIS dataset --------------------------------------------------
+#cost of constraints violation, permission to go beyond the margin, so influence or weight of the vector
+#gamma for nonlinear kernel function, the free parameter of the gaussian radial function
+#small gamma has large variance and the influence of the vector is larger
+View(iris)
+# Split dataset into train/test
+set.seed(123)
+split<-initial_split(iris) #default 3/4 split
+training_set<-training(split)
+test_set<-testing(split)
+model<-svm(Species~ .,data=training_set)
+summary(model)
+predictedvals <- predict(model,training_set[1:4])
+table(predictedvals,training_set$Species)
+tune_results<-tune(svm,train.x=iris[, 1:4],train.y=iris$Species,kernel='radial',ranges=list(cost=c(0.1,1,10),gamma=c(0.5,1,2)))
+#tune does a grid search
+summary(tune_results)
+tuned<-svm(Species~ ., data=training_set,kernel='radial',cost=1.5,gamma=0.1)
+summary(tuned)
