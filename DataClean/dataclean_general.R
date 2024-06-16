@@ -34,3 +34,17 @@ modified<-dataset %>% mutate(newdatacolumn = existingcolumn1 / existingcolumn2)
 #summaries
 #group_by()
 #summarise()
+
+
+#grepl returns boolean for search
+object1<-'example text'
+grepl('term to search for',object1)
+#gives you the index for grepl
+example<-c('a','b','c','c','d','e','f','g','2')
+grep('c',example)
+nchar() #length of string
+gsub() #replacement for pattern matching 
+gsub('pattern','replacement','hello have you seen the pattern here?')
+
+
+
